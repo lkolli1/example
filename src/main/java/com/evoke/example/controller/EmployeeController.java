@@ -26,10 +26,7 @@ public class EmployeeController {
     @GetMapping("/employees/{page}/{size}")
     public List<EmployeeDTO> findAll(@PathVariable(value="page",required = false) Integer page,
                                      @PathVariable(value="size",required = false)Integer size) {
-        if(page.intValue()<=0)
-            page=1;
-        if(size.intValue()<=0)
-            size=2;
+
 
         return empService.findAll(page,size);
     }
