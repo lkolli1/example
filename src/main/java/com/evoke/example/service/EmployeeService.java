@@ -9,19 +9,17 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
+
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 
 @Service
-@CacheConfig(cacheNames={"employeeCache"})
+@CacheConfig(cacheNames = {"employeeCache"})
 public class EmployeeService {
     @Autowired
     private EmployeeRepository empRepo;
@@ -33,69 +31,65 @@ public class EmployeeService {
         Employee emp = employeeMapper.toEntity(empDTO);
         empRepo.save(emp);
         return emp;
-
     }
 
     @Transactional
     public List<Employee> saveEmps(List<EmployeeDTO> empDTO) {
         empRepo.saveAll(employeeMapper.toEntityList(empDTO));
-        return employeeMapper.toEntityList(empDTO);//doubt
+        return employeeMapper.toEntityList(empDTO);
     }
-    @Cacheable(value="employeeCache")
-    public List<EmployeeDTO> findAll(Integer page,Integer size) {
-        Pageable firstPageWithElements = PageRequest.of(page, size,Sort.by("id"));
-        return employeeMapper.toDtoList(empRepo.findAll(firstPageWithElements).stream().toList());
+
+    @Cacheable(value = "employeeCache")
+    @Transactional(readOnly=true)
+    public List<EmployeeDTO> findAll(Integer page, Integer size) {
+
+        return employeeMapper.toDtoList(empRepo.findAll().stream().toList());
     }
-    @Cacheable(value="employeeCache",key="#id")
+
+    @Cacheable(value = "employeeCache", key = "#id")
+    @Transactional(readOnly=true)
     public EmployeeDTO findById(int id) {
         Employee employee = empRepo.findById(id);
-        EmployeeDTO empDTO = new EmployeeDTO();
-        empDTO = employeeMapper.toDto(employee);
+        EmployeeDTO empDTO = employeeMapper.toDto(employee);
         return empDTO;
 
     }
-    @Cacheable(value="employeeCache",key="#id",unless="#result==null")
+
+    @Cacheable(value = "employeeCache", key = "#id", unless = "#result==null")
+    @Transactional(readOnly=true)
     public EmployeeDTO finByName(String name) {
         return employeeMapper.toDto(empRepo.findByName(name));
 
     }
-
+    @Transactional(readOnly=true)
     public List<EmployeeDTO> findStreams() {
-        Pageable firstPageWithTwoElements = PageRequest.of(1, 3);
-        return employeeMapper.toDtoList(empRepo.findAll(firstPageWithTwoElements).stream()
+        return employeeMapper.toDtoList(empRepo.findAll().stream()
                 .filter(e -> e.getSalary() > 10000)
                 .toList());
     }
-
+    @Transactional(readOnly=true)
     public List<EmployeeDTO> findSorted() {
-        Pageable firstPageWithTwoElements = PageRequest.of(0, 2);
-       return employeeMapper.toDtoList(empRepo.findAll(firstPageWithTwoElements).stream()
+        return employeeMapper.toDtoList(empRepo.findAll().stream()
                 .sorted((e1, e2) -> e1.getName().compareTo(e2.getName())).toList());
     }
-
+    @Transactional(readOnly=true)
     public void findIncrement() {
-        Pageable firstPageWithTwoElements = PageRequest.of(0, 2);
-        empRepo.findAll(firstPageWithTwoElements).stream()
+
+        empRepo.findAll().stream()
                 .filter(e -> e.getSalary() < 10000)
-                .forEach(this::getIncrement);
-
+                .map(e -> e.getSalary() * 10).toList();
     }
-
-    public void getIncrement(Employee employee) {
-        Integer salary = employee.getSalary();
-        employee.setSalary(salary * 10);
-    }
-
     @Transactional
-    @CachePut(value="employeeCache")
+    @CachePut(value = "employeeCache")
     public Employee updateEmp(EmployeeDTO empDTO) {
         int k = empDTO.getId();
         Employee employee = empRepo.findById(k);
-        employee = employeeMapper.toEntity(empDTO);//if i dont send some fields that fields becoming null
+        employee = toEntityUpdate(empDTO,employee);
         empRepo.save(employee);
         return employee;
     }
-    @CacheEvict(value="employeeCache")
+    @Transactional
+    @CacheEvict(value = "employeeCache")
     public String deleteEmp(Integer id) {
 
         empRepo.deleteById(id);
@@ -105,5 +99,19 @@ public class EmployeeService {
             return "Employee Not Deleted";
     }
 
+    private Employee toEntityUpdate(EmployeeDTO employeeDTO, Employee employee) {
 
+        if (!StringUtils.isEmpty(employeeDTO.getRoad()) && !employee.getStreet().equals(employeeDTO.getRoad()))
+            employee.setStreet(employeeDTO.getRoad());
+        if (!StringUtils.isEmpty(employeeDTO.getName()) && !employee.getName().equals(employeeDTO.getName()))
+            employee.setName(employeeDTO.getName());
+        if (null != employeeDTO.getSalary() && employee.getSalary() != (employeeDTO.getSalary()))
+            employee.setSalary(employeeDTO.getSalary());
+        if (null != employeeDTO.getAge() && employee.getAge() != (employeeDTO.getAge()))
+            employee.setAge(employeeDTO.getAge());
+        if (!StringUtils.isEmpty(employeeDTO.getAddress()) && !employee.getAddress().equals(employeeDTO.getAddress()))
+            employee.setAddress(employeeDTO.getAddress());
+
+        return employee;
+    }
 }

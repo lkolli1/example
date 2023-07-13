@@ -1,6 +1,7 @@
 package com.evoke.example.controller;
 import com.evoke.example.dto.EmployeeDTO;
 import com.evoke.example.service.EmployeeService;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class EmployeeController {
     @ResponseBody
     public EmployeeDTO findByName(@PathVariable(value="name") String name){return empService.finByName(name);}
     @PutMapping("/employee")
-    public ResponseEntity<String> updateEmp(@RequestBody EmployeeDTO empDto) {
+    public ResponseEntity<String> updateEmp(@RequestBody EmployeeDTO empDto) throws JsonMappingException {
         HttpHeaders resHeaders = new HttpHeaders();
         return new ResponseEntity(empService.updateEmp(empDto), resHeaders, HttpStatus.CREATED);
     }

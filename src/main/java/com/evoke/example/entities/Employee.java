@@ -1,14 +1,15 @@
 package com.evoke.example.entities;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="Employee")
+@DynamicUpdate(true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +31,7 @@ public class Employee {
     @Column(name="emp_address")
     private String address;
     private String street;
+
 
 
 }

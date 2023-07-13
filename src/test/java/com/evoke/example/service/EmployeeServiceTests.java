@@ -4,6 +4,7 @@ import com.evoke.example.dto.EmployeeDTO;
 import com.evoke.example.entities.Employee;
 import com.evoke.example.mapper.EmployeeMapper;
 import com.evoke.example.repository.EmployeeRepository;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -120,7 +121,7 @@ public class EmployeeServiceTests {
     }
 
     @Test
-    public void updateEmpTest() {
+    public void updateEmpTest() throws JsonMappingException {
 
         given(empRepo.save(emp)).willReturn(emp);
         int k = empDTO.getId();
