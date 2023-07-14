@@ -1,5 +1,6 @@
 package com.evoke.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="course")
 @DynamicUpdate(true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,3 +33,5 @@ public class Course {
     @JsonIgnore
     private Employee employee;
 }
+
+

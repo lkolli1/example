@@ -17,19 +17,15 @@ public class CourseService {
     CourseMapper courseMapper;
     @Resource
     CourseRepository courseRepository;
-
     @Resource
     EmployeeRepository employeeRepository;
-
     public CourseDTO saveCourse(CourseDTO courseDTO) {
         Course course = courseMapper.toEntity(courseDTO);
-        Employee employee = employeeRepository.findById(courseDTO.getId()).orElse(null);
+        Employee employee = employeeRepository.findById(courseDTO.getEmployee().getId()).orElse(null);
         course.setEmployee(employee);
         courseRepository.save(course);
         return courseMapper.toDto(course);
-
     }
-
     public List<CourseDTO> saveCourses(List<CourseDTO> courseDTOList) {
         List<Course> courseList = courseMapper.toEntityList(courseDTOList);
         courseList.stream().forEach(course -> {
@@ -38,11 +34,12 @@ public class CourseService {
         courseRepository.saveAll(courseList);
         return courseMapper.toDtoList(courseList);
     }
-
     public CourseDTO getCourse(Integer id) {
-        return courseMapper.toDto(courseRepository.findById(id).orElse(null));
+        Course course=courseRepository.findById(id).orElse(null);
+        Employee employee=employeeRepository.findById(course.getEmployee().getId()).orElse(null);
+        course.setEmployee(employee);
+        return courseMapper.toDto(course);
     }
-
     public List<CourseDTO> getCourses() {
         return courseMapper.toDtoList(courseRepository.findAll());
     }

@@ -33,8 +33,15 @@ public class CourseController {
     }
     @GetMapping("/course/{id}")
     @ResponseBody
-    public CourseDTO getCourse(@PathVariable(value = "id") Integer id){
-        return courseService.getCourse(id);
+    public ResponseEntity<CourseDTO> getCourse(@PathVariable(value = "id") Integer id){
+        HttpHeaders resHeaders = new HttpHeaders();
+        return new ResponseEntity(courseService.getCourse(id), resHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/courses")
+    @ResponseBody
+    public List<CourseDTO> getCourses(){
+        return courseService.getCourses();
     }
 
 }
