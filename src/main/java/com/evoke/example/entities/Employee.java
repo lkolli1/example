@@ -1,5 +1,6 @@
 package com.evoke.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
@@ -33,6 +34,7 @@ public class Employee {
     private String address;
     private String street;
     @OneToMany(mappedBy = "employee")
+    @JsonBackReference
     private Set<Course> courses;
 
 

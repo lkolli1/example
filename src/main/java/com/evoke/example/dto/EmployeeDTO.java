@@ -38,7 +38,7 @@ public class EmployeeDTO {
     @JsonProperty("address")
     private String address;
     private String road;
-
+    private Set<Course> courses;
 
 
 }

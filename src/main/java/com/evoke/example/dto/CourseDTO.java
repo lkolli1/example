@@ -17,6 +17,6 @@ public class CourseDTO {
     private Integer course_id;
     private String course_name;
     private Integer course_duration;
-    @JsonIgnore
+    //@JsonIgnore
     private Employee employee;
 }
