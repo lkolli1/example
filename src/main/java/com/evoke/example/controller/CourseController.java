@@ -1,14 +1,11 @@
 package com.evoke.example.controller;
 
 import com.evoke.example.dto.CourseDTO;
-import com.evoke.example.dto.EmployeeDTO;
 import com.evoke.example.service.CourseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 
