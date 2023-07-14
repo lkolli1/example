@@ -35,7 +35,7 @@ public class Employee {
     private String street;
     @OneToMany(mappedBy = "employee")
     @JsonBackReference
-    private Set<Course> courses;
+    private Set<Course> courses=new HashSet<>();
 
 
 }
