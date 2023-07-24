@@ -57,7 +57,7 @@ public class EmployeeServiceTests {
     @Test
     public void saveEmpTest() {
         given(empRepo.save(emp)).willReturn(emp);
-        Employee savedEmployee = empService.saveEmp(empDTO);
+        EmployeeDTO savedEmployee = empService.saveEmp(empDTO);
         System.out.println(savedEmployee);
         //assertThat(savedEmployee).isEqualTo(any(Employee.class));
         assertThat(empService.saveEmp(empDTO)).isEqualTo(savedEmployee);

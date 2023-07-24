@@ -27,10 +27,10 @@ public class EmployeeService {
     EmployeeMapper employeeMapper;
 
     @Transactional
-    public Employee saveEmp(EmployeeDTO empDTO) {
+    public EmployeeDTO saveEmp(EmployeeDTO empDTO) {
         Employee emp = employeeMapper.toEntity(empDTO);
         empRepo.save(emp);
-        return emp;
+        return employeeMapper.toDto(emp);
     }
 
     @Transactional

@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,8 @@ public class Employee {
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
+//    @NonNull
+//    @Size(min=5)
     @Column(name = "emp_name")
     private String name;
     @Column(name = "emp_salary")
@@ -32,6 +35,8 @@ public class Employee {
     private Integer age;
     @Column(name = "emp_address")
     private String address;
+    private String email;
+    private String gender;
     private String street;
     @OneToMany(mappedBy = "employee")
     @JsonBackReference
