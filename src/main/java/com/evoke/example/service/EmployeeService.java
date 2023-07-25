@@ -2,6 +2,8 @@ package com.evoke.example.service;
 
 import com.evoke.example.dto.EmployeeDTO;
 import com.evoke.example.entities.Employee;
+import com.evoke.example.exception.CustomAccessDeniedHandler;
+import com.evoke.example.exception.EmployeeNotFoundException;
 import com.evoke.example.mapper.EmployeeMapper;
 import com.evoke.example.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ public class EmployeeService {
     @Resource
     EmployeeMapper employeeMapper;
 
+
     @Transactional
     public EmployeeDTO saveEmp(EmployeeDTO empDTO) {
         Employee emp = employeeMapper.toEntity(empDTO);
@@ -49,16 +52,25 @@ public class EmployeeService {
     @Cacheable(value = "employeeCache", key = "#id")
     @Transactional(readOnly=true)
     public EmployeeDTO findById(int id) {
-        Employee employee = empRepo.findById(id);
-        EmployeeDTO empDTO = employeeMapper.toDto(employee);
-        return empDTO;
+
+            Employee employee = empRepo.findById(id).orElse(null);
+            if(null==employee)
+                throw new EmployeeNotFoundException("Employee does not exits with given id :"+id);
+            EmployeeDTO empDTO = employeeMapper.toDto(employee);
+            return empDTO;
+
+
 
     }
 
     @Cacheable(value = "employeeCache", key = "#id", unless = "#result==null")
     @Transactional(readOnly=true)
     public EmployeeDTO finByName(String name) {
-        return employeeMapper.toDto(empRepo.findByName(name));
+       if(empRepo.existsByName(name)) return employeeMapper.toDto(empRepo.findByName(name));
+       else {
+           throw new EmployeeNotFoundException("Employee does not exits with given Name"+name);
+       }
+
 
     }
     @Transactional(readOnly=true)
@@ -83,7 +95,7 @@ public class EmployeeService {
     @CachePut(value = "employeeCache")
     public Employee updateEmp(EmployeeDTO empDTO) {
         int k = empDTO.getId();
-        Employee employee = empRepo.findById(k);
+        Employee employee = empRepo.findById(k).orElse(null);
         employee = toEntityUpdate(empDTO,employee);
         empRepo.save(employee);
         return employee;

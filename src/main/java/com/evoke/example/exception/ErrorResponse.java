@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ErrorResponse {
 	
-	private HttpStatus status;
+	private int status;
 	private String message;
 
 }

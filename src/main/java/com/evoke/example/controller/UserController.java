@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1")
-public class JwtController {
+public class UserController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -42,7 +42,7 @@ public class JwtController {
 
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
