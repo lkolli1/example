@@ -1,5 +1,6 @@
 package com.evoke.example;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableSwagger2
+@Slf4j
 public class DemoApplication {
     @FunctionalInterface
     public interface Arth {
@@ -32,7 +34,7 @@ public class DemoApplication {
 
         List<Integer> list = Arrays.asList(-98, 23, 33, 3, 6, 3, 5, 6, 8, 9, 9, 12, 15, -45);
 
-        // list.stream().sorted().peek(x -> System.out.println(x));
+         list.stream().sorted(Integer::compareTo).forEach(x -> log.info(x.toString()));
         // list.stream().sorted(Comparator.reverseOrder()).forEach(x -> System.out.println(x));
         //System.out.println(list.stream().filter(num->33==(num)).count());
         list.stream().filter(i -> i % 2 == 1)

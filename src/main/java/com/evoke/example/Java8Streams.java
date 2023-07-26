@@ -1,29 +1,32 @@
 package com.evoke.example;
 
-import javax.xml.stream.events.Characters;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.lang.Long.sum;
-
+@Slf4j
 public class Java8Streams {
     public static void main(String[] args) {
         List<Integer> listInt = Arrays.asList(23, 24, 25, 25, 26, 27, 32, 32, 33, 34);
-        System.out.println(listInt.stream().max(Comparator.comparing(Integer::intValue)).get());
-        listInt.stream().map(i -> i * 3).forEach(System.out::println);
+
+        log.info(listInt.stream().max(Comparator.comparing(Integer::intValue)).get().toString());
+        listInt.stream().map(i -> i * 3).forEach(i->log.info(String.valueOf(i)));
 
         int[] nums = {12, 13, 14, 12};
         Arrays.sort(nums);
         Arrays.stream(nums).forEach(System.out::println);
         List<Integer> listInt1 = Arrays.stream(nums).boxed().toList();
-        Stream.concat(listInt.stream(), listInt1.stream()).forEach(System.out::println);
+                Stream.concat(listInt.stream(), listInt1.stream()).forEach(System.out::println);
         Set<Integer> setInts = new HashSet<>(listInt1);
         if (listInt1.size() == setInts.size()) {
             System.out.println("false");
         } else {
-            System.out.println("true");
+            System.out.println("true"+listInt1.size() +"hai set: "+setInts.size());
         }
         String[] strs = {"AA", "BB", "CC", "AA", "abdd"};
 
@@ -36,19 +39,19 @@ public class Java8Streams {
 
         listString.stream().map(String::toLowerCase)
                 .forEach(System.out::println);
-        //listInt.stream().filter(i->i%2>0).forEach(System.out::println);
-       /* listInt.stream().map(e->e+"")
+        listInt.stream().filter(i->i%2>0).forEach(System.out::println);
+        listInt.stream().map(e->e+"")
                 .filter(e->e.startsWith("3"))
                 .forEach(System.out::println);//starts with
-                */
+
         Set<Integer> setInt = new HashSet<>();
         listInt.stream().filter(e -> !setInt.add(e))
                 .forEach(System.out::println);
-        // listInt.stream().findFirst().ifPresent(System.out::println);
-        //Long cnt=listInt.stream().count();
-        // System.out.println(cnt);
-        //int maxNum=listInt.stream().max(Integer::compare).get();
-        //System.out.println(maxNum);
+         listInt.stream().findFirst().ifPresent(System.out::println);
+        Long ct=listInt.stream().count();
+         System.out.println(ct);
+        int maxNum=listInt.stream().max(Integer::compare).get();
+        System.out.println(maxNum);
         String input = "Java articles are Awesome";
 
         Character result = input.chars()
@@ -91,11 +94,18 @@ public class Java8Streams {
                 .forEach((K, V) -> System.out.println("Dept=" + K + ",Avg Sal=" + V));
         empList.stream().sorted(Comparator.comparing(Emp::getSalary).reversed()).forEach(System.out::println);
 
-empList.stream().filter(e->e.getAge()>25)
-        .forEach(e->{
-            e.setSalary(e.getSalary()*3);
-            System.out.println(e);
-        });
+        empList.stream().filter(e -> e.getAge() > 25)
+                .forEach(e -> {
+                    e.setSalary(e.getSalary() * 3);
+                    System.out.println(e);
+                });
+        Consumer<String> str = System.out::println;
+        str.accept("Sairam");
+        Supplier<String> str1 = () -> "Sairam";
+        System.out.println(str1.get());
+        List<List<String>> names = Arrays.asList(Arrays.asList("ss", "ll"), Arrays.asList("kk", "ssr"));
+        names.stream().flatMap(name -> name.stream()).filter(s -> s.startsWith("s")).forEach(System.out::println);
+        Stream.iterate(2, cnt -> cnt + 1).filter(i -> i % 2 == 0).limit(5).forEach(System.out::println);
     }
 
 }

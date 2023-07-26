@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,7 +68,7 @@ public class UserController {
                     userDetails.getId(), // id
                     userDetails.getUsername(), // username
                     userDetails.getEmail(), // email
-                    userDetails.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toSet()) // Set<String>
+                    userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()) // Set<String>
             );
 
             return ResponseEntity.ok().headers(responseHeaders).body(jwtResponse);

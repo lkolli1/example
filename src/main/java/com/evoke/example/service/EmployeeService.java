@@ -56,8 +56,7 @@ public class EmployeeService {
             Employee employee = empRepo.findById(id).orElse(null);
             if(null==employee)
                 throw new EmployeeNotFoundException("Employee does not exits with given id :"+id);
-            EmployeeDTO empDTO = employeeMapper.toDto(employee);
-            return empDTO;
+        return employeeMapper.toDto(employee);
 
 
 
@@ -113,15 +112,15 @@ public class EmployeeService {
 
     private Employee toEntityUpdate(EmployeeDTO employeeDTO, Employee employee) {
 
-        if (!StringUtils.isEmpty(employeeDTO.getRoad()) && !employee.getStreet().equals(employeeDTO.getRoad()))
+        if (!StringUtils.hasLength(employeeDTO.getRoad()) && !employee.getStreet().equals(employeeDTO.getRoad()))
             employee.setStreet(employeeDTO.getRoad());
-        if (!StringUtils.isEmpty(employeeDTO.getName()) && !employee.getName().equals(employeeDTO.getName()))
+        if (!StringUtils.hasLength(employeeDTO.getName()) && !employee.getName().equals(employeeDTO.getName()))
             employee.setName(employeeDTO.getName());
-        if (null != employeeDTO.getSalary() && employee.getSalary() != (employeeDTO.getSalary()))
+        if (null != employeeDTO.getSalary() && employee.getSalary() != (employeeDTO.getSalary().intValue()))
             employee.setSalary(employeeDTO.getSalary());
-        if (null != employeeDTO.getAge() && employee.getAge() != (employeeDTO.getAge()))
+        if (null != employeeDTO.getAge() && employee.getAge() != (employeeDTO.getAge().intValue()))
             employee.setAge(employeeDTO.getAge());
-        if (!StringUtils.isEmpty(employeeDTO.getAddress()) && !employee.getAddress().equals(employeeDTO.getAddress()))
+        if (!StringUtils.hasLength(employeeDTO.getAddress()) && !employee.getAddress().equals(employeeDTO.getAddress()))
             employee.setAddress(employeeDTO.getAddress());
 
         return employee;

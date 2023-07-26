@@ -35,13 +35,13 @@ public class CustomAccessDeniedHandler extends ResponseEntityExceptionHandler im
         response.getWriter().flush();
         response.getWriter().close();
     }
+
     @ExceptionHandler(value = EmployeeNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public @ResponseBody ErrorResponse handleException(EmployeeNotFoundException ex) {
         log.error("Employee NotFoundException.", ex);
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
-
 
 
     @ExceptionHandler(value = InvalidTokenException.class)
@@ -52,14 +52,12 @@ public class CustomAccessDeniedHandler extends ResponseEntityExceptionHandler im
     }
 
 
-
     @ExceptionHandler(value = RoleMismatchException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public @ResponseBody ErrorResponse handleException(RoleMismatchException ex) {
         log.error("RoleMismatchException .", ex);
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
-
 
 
     @ExceptionHandler(InvalidCredentialsException.class)

@@ -16,23 +16,23 @@ public class CourseController {
 
     @PostMapping("/course")
     @ResponseBody
-    public ResponseEntity<String> saveCourse(@RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<Object> saveCourse(@RequestBody CourseDTO courseDTO) {
         HttpHeaders resHeaders = new HttpHeaders();
-        return new ResponseEntity(courseService.saveCourse(courseDTO), resHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(courseService.saveCourse(courseDTO), resHeaders, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/courses")
     @ResponseBody
-    public ResponseEntity<String> saveCourses(@RequestBody List<CourseDTO> courseDTOList) {
+    public ResponseEntity<Object> saveCourses(@RequestBody List<CourseDTO> courseDTOList) {
         HttpHeaders resHeaders = new HttpHeaders();
-        return new ResponseEntity(courseService.saveCourses(courseDTOList), resHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(courseService.saveCourses(courseDTOList), resHeaders, HttpStatus.CREATED);
     }
     @GetMapping("/course/{id}")
     @ResponseBody
-    public ResponseEntity<CourseDTO> getCourse(@PathVariable(value = "id") Integer id){
+    public ResponseEntity<Object> getCourse(@PathVariable(value = "id") Integer id){
         HttpHeaders resHeaders = new HttpHeaders();
-        return new ResponseEntity(courseService.getCourse(id), resHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(courseService.getCourse(id), resHeaders, HttpStatus.OK);
     }
 
     @GetMapping("/courses")

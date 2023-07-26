@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.evoke.example.service.UserDetailsServiceImpl;
 import com.evoke.example.util.JwtUtils;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,9 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	private UserDetailsServiceImpl userDetailsService;
 
 	protected void doFilterInternal(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			FilterChain filterChain)
+			@NonNull HttpServletRequest request,
+			@NonNull HttpServletResponse response,
+			@NonNull FilterChain filterChain)
 			throws ServletException, IOException
 	{
 		try {
@@ -58,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	private String readJwtToken(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
 		if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7, headerAuth.length());
+			return headerAuth.substring(7);
 		}
 		return null;
 	}

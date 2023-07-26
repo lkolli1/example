@@ -34,7 +34,7 @@ public class EmployeeController {
         HttpHeaders resHeaders = new HttpHeaders();
         employeeValidator.validate(employee, errors);
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(errors.getFieldError(), resHeaders, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors.getAllErrors(), resHeaders, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(empService.saveEmp(employee), resHeaders, HttpStatus.CREATED);
     }
